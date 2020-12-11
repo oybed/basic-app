@@ -14,18 +14,18 @@ spec:
       command: ["/bin/bash", "-c"]
       args:
         - |-
-        cat index.html 
+          cat index.html 
     - name: run-tweak
       image: quay.io/openshift/origin-cli:latest
       workingDir: /workspace/source
       command: ["/bin/bash", "-c"]
       args:
         - |-
-        sed -i 's/very/VERY/g' index.html 
+          sed -i 's/very/VERY/g' index.html 
     - name: file-after-tweak
       image: quay.io/openshift/origin-cli:latest
       workingDir: /workspace/source
       command: ["/bin/bash", "-c"]
       args:
         - |-
-        cat index.html 
+          cat index.html 
