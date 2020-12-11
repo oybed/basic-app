@@ -1,1 +1,1 @@
-# basic-node-app
+# basic-app
