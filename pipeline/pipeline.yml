@@ -1,0 +1,59 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-and-deploy
+spec:
+  workspaces:
+  - name: basic-app
+  params:
+  - name: deployment-name
+    type: string
+    description: Name of the deployment
+  - name: scm-url
+    description: Git Repo for Source Code
+    default: "https://github.com/oybed/basic-app.io"
+    type: string
+  - name: scm-ref
+    description: Ref in Git Repo
+    default: "main"
+    type: string
+  tasks:
+  - name: fetch-repository
+    taskRef:
+      name: git-clone
+      kind: ClusterTask
+    workspaces:
+    - name: output
+      workspace: basic-app
+    params:
+    - name: url
+      value: $(params.scm-url)
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "true"
+    - name: revision
+      value: $(params.scm-ref)
+  - name: run-build
+    taskRef:
+      name: run-build
+    workspaces:
+    - name: source
+      workspace: basic-app
+    runAfter:
+    - fetch-repository
+  - name: build-image
+    taskRef:
+      name: buildah
+      kind: ClusterTask
+    params:
+    - name: TLSVERIFY
+      value: "false"
+    - name: IMAGE
+      value: image-registry.openshift-image-registry.svc:5000/oybed-basic-appsite
+    workspaces:
+    - name: source
+      workspace: basic-app
+    runAfter:
+    - run-build
