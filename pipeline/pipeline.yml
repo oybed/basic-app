@@ -12,7 +12,7 @@ spec:
     description: Name of the deployment
   - name: scm-url
     description: Git Repo for Source Code
-    default: "https://github.com/oybed/basic-app.io"
+    default: "https://github.com/oybed/basic-app.git"
     type: string
   - name: scm-ref
     description: Ref in Git Repo
@@ -51,7 +51,7 @@ spec:
     - name: TLSVERIFY
       value: "false"
     - name: IMAGE
-      value: image-registry.openshift-image-registry.svc:5000/oybed-basic-appsite
+      value: image-registry.openshift-image-registry.svc:5000/oybed-basic-app
     workspaces:
     - name: source
       workspace: basic-app
